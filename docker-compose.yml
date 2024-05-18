@@ -1,0 +1,23 @@
+version: '4'
+services:
+
+  todo-api:
+    build:
+      context: /app/todo-api/
+      dockerfile: .
+    hostname: "todo-api"
+    ports:
+      - "3000:3000"
+    environment:
+      - TODO_DATABASE_URL=mongodb://mongodb:27017/todo-api
+
+  mongodb:
+      image: mongo:latest
+      hostname: "mongodb"
+      ports:
+        - "27017:27017"
+      volumes:
+        - mongodb_data:/data/db # Volume para persistência dos dados do MongoDB
+
+volumes:
+  mongodb_data:
