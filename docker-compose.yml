@@ -3,21 +3,43 @@ services:
 
   todo-api:
     build:
-      context: /app/todo-api/
-      dockerfile: .
+      context: app/todo-api/
+      dockerfile: Dockerfile
     hostname: "todo-api"
     ports:
       - "3000:3000"
     environment:
       - TODO_DATABASE_URL=mongodb://mongodb:27017/todo-api
 
-  mongodb:
+  account-migrations:
+      build:
+        context: app/account-api/
+        dockerfile: Dockerfile.Migrations
+      environment:
+        - ACCOUNT_CONNECTION_STRING=Host=account-db;Port=5432;Database=postgres;Username=admin;Password=admin;
+      depends_on:
+        - account-db
+
+  todo-db:
       image: mongo:latest
       hostname: "mongodb"
       ports:
         - "27017:27017"
       volumes:
-        - mongodb_data:/data/db # Volume para persistência dos dados do MongoDB
+        - mongodb_data:/data/db
+
+  account-db:
+    image: postgres:13
+    hostname: account-db
+    environment:
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: admin
+      POSTGRES_DB: account
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
 
 volumes:
   mongodb_data:
+  postgres_data:

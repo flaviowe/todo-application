@@ -1,0 +1,19 @@
+# Etapa de construção
+FROM mcr.microsoft.com/dotnet/sdk:7.0 AS build
+WORKDIR /src
+
+# Copiar arquivos de projeto e restaurar dependências
+COPY ["src/Account.Domain/Account.Domain.csproj", "Account.Domain/"]
+COPY ["src/Account.Infra/Account.Infra.csproj", "Account.Infra/"]
+COPY ["src/Account.Migrations/Account.Migrations.csproj", "Account.Migrations/"]
+RUN dotnet restore "Account.Migrations/Account.Migrations.csproj"
+
+# Copiar o restante dos arquivos do projeto e compilar
+COPY ["src/Account.Domain/", "Account.Domain/"]
+COPY ["src/Account.Infra/", "Account.Infra/"]
+COPY ["src/Account.Migrations/", "Account.Migrations/"]
+WORKDIR "/src/Account.Migrations"
+
+RUN dotnet tool install --global dotnet-ef --version 7.0.18
+
+CMD [ "ls -l" ]

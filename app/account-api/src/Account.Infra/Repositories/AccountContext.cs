@@ -4,26 +4,34 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Account.Infra.Repositories;
 
-public class TodoContext : DbContext
+public class AccountContext : DbContext
 {
-    public TodoContext(DbContextOptions options) : base(options)
-    {
-    }
+    public AccountContext(DbContextOptions<AccountContext> options) : base(options) {}
 
     public DbSet<User> Users { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        AddUser(modelBuilder);
+    }
+
+    private static void AddUser(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<User>(entity =>
         {
             entity.ToTable("users");
 
             AddId(entity);
-            
+
             entity.Property(e => e.Name)
                 .HasColumnName("name")
                 .IsRequired()
                 .HasMaxLength(100);
+
+            entity.Property(e => e.Email)
+                .HasColumnName("email")
+                .IsRequired()
+                .HasMaxLength(150);
 
             entity.Property(e => e.Password)
                 .HasColumnName("password")
@@ -32,12 +40,9 @@ public class TodoContext : DbContext
 
             AddBaseEntity(entity);
         });
-
-
-
     }
 
-  private static void AddId<T>(EntityTypeBuilder<T> entity) where T : BaseEntity
+    private static void AddId<T>(EntityTypeBuilder<T> entity) where T : BaseEntity
     {
         entity.Property(e => e.Id)
             .HasColumnName("id")
@@ -55,11 +60,9 @@ public class TodoContext : DbContext
             .IsRequired();
 
         entity.Property(e => e.UpdateBy)
-            .HasColumnName("update_by")
-            .IsRequired();
+            .HasColumnName("update_by");
 
         entity.Property(e => e.UpdateAt)
-            .HasColumnName("update_at")
-            .IsRequired();
+            .HasColumnName("update_at");
     }
 }

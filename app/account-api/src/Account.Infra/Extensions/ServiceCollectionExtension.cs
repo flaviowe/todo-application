@@ -25,7 +25,7 @@ public static class ServiceCollectionExtension
 
     private static IServiceCollection AddDatabase(this IServiceCollection services, string connectionString)
     {
-        services.AddDbContext<TodoContext>(
+        services.AddDbContext<AccountContext>(
             options => options.UseNpgsql(connectionString)
         );
 
