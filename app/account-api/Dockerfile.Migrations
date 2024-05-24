@@ -12,8 +12,7 @@ RUN dotnet restore "Account.Migrations/Account.Migrations.csproj"
 COPY ["src/Account.Domain/", "Account.Domain/"]
 COPY ["src/Account.Infra/", "Account.Infra/"]
 COPY ["src/Account.Migrations/", "Account.Migrations/"]
-WORKDIR "/src/Account.Migrations"
 
 RUN dotnet tool install --global dotnet-ef --version 7.0.18
-
-CMD [ "ls -l" ]
+ENV PATH="$PATH:/root/.dotnet/tools"
+ENTRYPOINT dotnet-ef database update --project Account.Infra/Account.Infra.csproj --startup-project Account.Migrations/Account.Migrations.csproj 
