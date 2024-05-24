@@ -15,4 +15,4 @@ COPY ["src/Account.Migrations/", "Account.Migrations/"]
 
 RUN dotnet tool install --global dotnet-ef --version 7.0.18
 ENV PATH="$PATH:/root/.dotnet/tools"
-ENTRYPOINT dotnet-ef database update --project Account.Infra/Account.Infra.csproj --startup-project Account.Migrations/Account.Migrations.csproj 
+CMD dotnet-ef database update --project Account.Infra/Account.Infra.csproj --startup-project Account.Migrations/Account.Migrations.csproj 
