@@ -70,7 +70,7 @@ public class LoginUseCase : ILoginUseCase
                         _outputPort?.InvalidPassword();
                         break;
 
-                    case ValidatePasswordErrors.Unauthorized:
+                    case ValidatePasswordErrors.NotFound:
                         _outputPort?.Unauthorized();
                         break;
                         

@@ -1,45 +1,30 @@
-using System.Text;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.IdentityModel.Tokens;
+using Ocelot.Infra.Extensions;
 using Ocelot.DependencyInjection;
 using Ocelot.Middleware;
+using Ocelot.ApiGateway.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 
-var jwtKey = Encoding.ASCII.GetBytes("key");
-string jwtIssuer = "issuer";
+string accountEndpoint = Environment.GetEnvironmentVariable("ACCOUNT_ENDPOINT") ?? "localhost";
+string tokenKey = Environment.GetEnvironmentVariable("TOKEN_KEY") ?? "tokenKey";
+string tokenIssuer = Environment.GetEnvironmentVariable("TOKEN_ISSUER") ?? "tokenIssuer";
+string tokenAudience = Environment.GetEnvironmentVariable("TOKEN_AUDIENCE") ?? "tokenAudience";
 
-// Add services to the container.
+builder.Configuration.AddJsonFile("ocelot.json");
 
 builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-builder.Services
-        .AddAuthentication(x =>
-        {
-            x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-            x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-        })
-        .AddJwtBearer(x =>
-        {
-            x.RequireHttpsMetadata = false;
-            x.SaveToken = true;
-            x.TokenValidationParameters = new TokenValidationParameters
-            {
-                ValidateIssuer = true,
-                ValidateAudience = true,
-                ValidateLifetime = true,
-                ValidateIssuerSigningKey = true,
-                ValidIssuer = jwtIssuer,
-                ValidAudience = jwtIssuer,
-                IssuerSigningKey = new SymmetricSecurityKey(jwtKey)
-            };
-        });
-        
-builder.Services
-    .AddOcelot();
+builder.Services.AddOcelot();
+
+builder.Services.AddApiGatewayServices(
+    tokenKey: tokenKey,
+    tokenIssuer: tokenIssuer,
+    tokenAudience: tokenAudience
+);
+
+builder.Services.AddInfraestructure(accountEndpoint);
 
 var app = builder.Build();
 
@@ -57,6 +42,6 @@ app.UseAuthorization();
 
 app.MapControllers();
 
-app.UseOcelot().Wait();
+await app.UseOcelot();
 
 app.Run();

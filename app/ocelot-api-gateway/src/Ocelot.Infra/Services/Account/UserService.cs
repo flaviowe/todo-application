@@ -10,7 +10,7 @@ public class UserService : IUserService
 
     public UserService(IHttpClientFactory httpClientFactory)
     {
-        _httpClient = httpClientFactory.CreateClient("account");
+        _httpClient = httpClientFactory.CreateClient("AccountApi");
     }
 
     public async Task<Result<ValidatePasswordResponse, ValidatePasswordErrors>> ValidatePasswordAsync(string email, string password)

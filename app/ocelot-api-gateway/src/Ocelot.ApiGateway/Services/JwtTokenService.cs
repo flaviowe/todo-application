@@ -4,26 +4,26 @@ using System.Text;
 using Microsoft.IdentityModel.Tokens;
 using Ocelot.Domain.Services;
 
-namespace Ocelot.Infra.Services;
+namespace Ocelot.ApiGateway.Services;
 
 public class JwtTokenService : ITokenService
 {
-    private readonly Settings _settings;
+    private readonly JwtTokenSettings _jwtTokenSettings;
 
     public JwtTokenService(
-        Settings settings
+        JwtTokenSettings jwtTokenSettings
     )
     {
-        _settings = settings;
+        _jwtTokenSettings = jwtTokenSettings;
     }
 
     public string CreateToken(Guid userId, string email)
     {
         var tokenHandler = new JwtSecurityTokenHandler();
 
-        var key = Encoding.ASCII.GetBytes(_settings.TokenKey);
-        var jwtIssuer = _settings.TokenIssuer;
-        var jwtAudience = _settings.TokenAudience;
+        var key = Encoding.ASCII.GetBytes(_jwtTokenSettings.TokenKey);
+        var jwtIssuer = _jwtTokenSettings.TokenIssuer;
+        var jwtAudience = _jwtTokenSettings.TokenAudience;
 
         var tokenDescriptor = new SecurityTokenDescriptor
         {

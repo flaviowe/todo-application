@@ -1,4 +1,4 @@
-namespace Ocelot.Domain.Services
+namespace Ocelot.Domain.Services;
 
 public interface ITokenService
 {

@@ -1,6 +1,6 @@
-namespace Ocelot.Infra;
+namespace Ocelot.ApiGateway.Services;
 
-public struct Settings
+public class JwtTokenSettings
 {
     public required string TokenKey { get; set; }
     public required string TokenIssuer { get; set; }
