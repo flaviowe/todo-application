@@ -1,4 +1,5 @@
-﻿using Account.Domain.UseCases.User.ValidatePassword;
+﻿using Account.Domain.Repositories;
+using Account.Domain.UseCases.User.ValidatePassword;
 using Account.Infra.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
@@ -11,7 +12,8 @@ public static class ServiceCollectionExtension
     {
         services
             .AddUseCases()
-            .AddDatabase(settings.ConnectionString);
+            .AddDatabase(settings.AccountConnectionString)
+            .AddRepositories();
 
         return services;
     }
@@ -29,6 +31,14 @@ public static class ServiceCollectionExtension
             options => options.UseNpgsql(connectionString)
         );
 
+        return services;
+    }
+
+    private static IServiceCollection AddRepositories(this IServiceCollection services)
+    {
+        services
+            .AddScoped<IUserRepository, UserRepository>();
+            
         return services;
     }
 

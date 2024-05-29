@@ -1,18 +1,26 @@
+using Account.Api.Extensions;
 using Account.Infra.Extensions;
+
+string accountConnectionString = Environment.GetEnvironmentVariable("ACCOUNT_CONNECTION_STRING") ?? "";
+string tokenKey = Environment.GetEnvironmentVariable("TOKEN_KEY") ?? "tokenKey";
+string tokenIssuer = Environment.GetEnvironmentVariable("TOKEN_ISSUER") ?? "tokenIssuer";
+string tokenAudience = Environment.GetEnvironmentVariable("TOKEN_AUDIENCE") ?? "tokenAudience";
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-
 builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+
+builder.Services.AddApiServices(
+    tokenKey: tokenKey,
+    tokenIssuer: tokenIssuer,
+    tokenAudience: tokenAudience
+);
 
 builder.Services.AddAccountInfra(
     new()
     {
-        ConnectionString = "",
+        AccountConnectionString = accountConnectionString,
     }
 );
 

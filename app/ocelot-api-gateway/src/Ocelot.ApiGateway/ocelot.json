@@ -15,15 +15,29 @@
       ]
     },
     {
+      "DownstreamPathTemplate": "/User/ValidatePassword",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "account-api",
+          "Port": 5276
+        }
+      ],
+      "UpstreamPathTemplate": "/AccountApi/User/ValidatePassword",
+      "UpstreamHttpMethod": [
+        "Get"
+      ]
+    },
+    {
       "DownstreamPathTemplate": "/api/todo",
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
-          "Host": "localhost",
+          "Host": "todo-api",
           "Port": 5001
         }
       ],
-      "UpstreamPathTemplate": "/todo-api/todo",
+      "UpstreamPathTemplate": "/TodoApi/todo",
       "UpstreamHttpMethod": [
         "Get",
         "Post",

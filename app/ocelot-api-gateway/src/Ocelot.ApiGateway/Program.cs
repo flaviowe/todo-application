@@ -14,7 +14,6 @@ builder.Configuration.AddJsonFile("ocelot.json");
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
 
 builder.Services.AddOcelot();
 

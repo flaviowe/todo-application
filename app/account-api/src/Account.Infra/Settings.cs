@@ -2,5 +2,5 @@ namespace Account.Infra;
 
 public struct Settings
 {
-    public required string ConnectionString { get; set; }
+    public required string AccountConnectionString { get; set; }
 }
